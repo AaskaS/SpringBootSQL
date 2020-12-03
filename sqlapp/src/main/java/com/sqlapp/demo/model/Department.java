@@ -24,27 +24,16 @@ public class Department {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@GeneratedValue
 	@Column(name = "id")
 	private long id;
-	
+
 	@NaturalId
 	@JoinColumn(name = "dept_id", referencedColumnName = "dept")
-    private long deptId;
-	
+	private long deptId;
 
-	/*
-	 * @Column(name = "dep_id") public long departId;
-	 */
-
-	@Column(name = "dept_name", unique=true)
+	@Column(name = "dept_name", unique = true)
 	public String departName;
 
-	//@OneToMany( mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-	//@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
-	//private List<Employee> employees;
-
-		
 	public long getId() {
 		return id;
 	}
@@ -52,12 +41,6 @@ public class Department {
 	public void setId(long id) {
 		this.id = id;
 	}
-
-	/*
-	 * public long getDepartId() { return departId; }
-	 * 
-	 * public void setDepartId(long departId) { this.departId = departId; }
-	 */
 
 	public String getDepartName() {
 		return departName;
@@ -74,12 +57,5 @@ public class Department {
 	public void setDeptId(long deptId) {
 		this.deptId = deptId;
 	}
-
-	/*
-	 * public List<Employee> getEmployees() { return employees; }
-	 * 
-	 * public void setEmployees(List<Employee> employees) { this.employees =
-	 * employees; }
-	 */
 
 }
