@@ -25,18 +25,6 @@ public class EmployeeInfoController {
 	@Autowired
 	private EmployeeInfoService employeeInfoService;
 	
-	@GetMapping("/showFormForUpdate/{id}")
-	public String showFormForUpdate(@PathVariable(value = "id") long id, Model model) {
-		// get employee from the service
-		Employee employee = employeeService.getEmployeeById(id);
-
-		// set employee as a model attribute to pre-populate the form
-		model.addAttribute("employee", employee);
-
-		return "new_employee";
-		// tutorial said to use "update_employee" but ultimately it's the same as
-		// using "new_employee" + hidden id field
-	}
 
 	@GetMapping("/showProfileUpdate/{id}")
 	public String showProfileUpdate(@PathVariable(value = "id") long id, Model model) {

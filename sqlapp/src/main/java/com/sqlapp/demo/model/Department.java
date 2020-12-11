@@ -27,8 +27,7 @@ public class Department {
 	@Column(name = "id")
 	private long id;
 
-	@NaturalId
-	@JoinColumn(name = "dept_id", referencedColumnName = "dept")
+	@Column(name = "dept_Id", unique=true)
 	private long deptId;
 
 	@Column(name = "dept_name", unique = true)

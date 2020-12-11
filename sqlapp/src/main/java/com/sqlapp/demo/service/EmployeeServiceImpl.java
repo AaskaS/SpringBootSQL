@@ -1,6 +1,8 @@
 package com.sqlapp.demo.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeRepository.findAll();
 	}
 	
+	@Override
+	public List<Department> getAllDepartment(){
+		return departmentRepository.findAll();
+	}
+	
+	public Map<Long,String> getDepartmentMap(){
+		List<Department> listID = departmentRepository.findAll();
+		//System.out.println(listID.get(1).getDepartName());
+		Map<Long,String> map = new HashMap<Long,String>();
+		for (Department i : listID) map.put(i.getDeptId(),i.getDepartName());
+		return map;
+	}
 
 	
 	@Override
@@ -38,6 +52,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void saveEmployee(Employee employee) {
+		
+		List<Department> department = departmentRepository.findByDeptId(employee.getDepartment_id());
+	
+		
+		if(department.isEmpty()) {
+			System.out.println("emptyyyy :(");
+		}
+		else {
+			System.out.println(department.get(0).getDepartName());
+		}
+		
+		
 		this.employeeRepository.save(employee);
 
 		
@@ -60,6 +86,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 
+	@Override
+	public void deleteDepartmentById(long id) {
+		this.departmentRepository.deleteById(id);
+	}
 
 	@Override
 	public void deleteEmployeeById(long id) {

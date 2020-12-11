@@ -19,7 +19,7 @@ public class EmployeeForm {
 		private String email;
 		
 		@NotNull
-		private long depart_id;
+		private long department_id;
 		
 }
 

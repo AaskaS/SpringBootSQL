@@ -17,68 +17,62 @@
 
 	<div th:replace="fragments/header :: name(page='Employee Management')"></div>
 	<div th:insert="fragments/nav"></div>
-	
-	<div id="main" >
+
+	<div id="main">
 		<div class="container " id="w3-container">
-			<h1>Employee Management</h1>	
-			
+			<h1>Employee Management</h1>
+
 			<form action="#" th:action="@{/saveEmployee}" th:object="${employee}"
 				method="POST">
 				<!-- Add hidden form field to handle update -->
+
+				<input type="hidden" th:field="*{id}" /> 
+				<span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class = "text-danger">Full name error</span> 
+				<input type="text" th:field="*{firstName}"
+					placeholder="Employee First Name" class="form-control mb-4 col-4"
+					required /> 
+				<span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class = "text-danger">Full name error</span> 
+				<input type="text"
+					th:field="*{lastName}" placeholder="Employee Last Name"
+					class="form-control mb-4 col-4" required /> 
+				<span
+					th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class = "text-danger">Full
+					name error</span> 
+				<input type="email" th:field="*{email}"
+					placeholder="Employee Email" class="form-control mb-4 col-4"
+					required /> 
+			<!--	<input type="text" th:field="*{department_id}" />-->
+				<span th:if="${#fields.hasErrors('department_id')}" th:errors="*{department_id}" class = "text-danger">Full Name Error</span> 
+			 	
 				
-				<input type="hidden" th:field="*{id}" />
-				<span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" >Full name error</span>
-				<input type="text" th:field="*{firstName}" placeholder="Employee First Name" class="form-control mb-4 col-4" required />
-				<span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" >Full name error</span>
-				<input type="text" th:field="*{lastName}" placeholder="Employee Last Name" class="form-control mb-4 col-4" required /> 
-				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" >Full name error</span>
-				<input type="email" th:field="*{email}" placeholder="Employee Email" class="form-control mb-4 col-4" required />
-				<!-- <span th:if="${#fields.hasErrors('dept')}" th:errors="*{dept}" >Full name error</span> -->
-			 	<input type="text" th:field="*{department_id}" placeholder="Employee Department ID" class="form-control mb-4 col-4" required /> 
-				
-				<!-- <input type="text" th:field="*{departName}" placeholder="Department Name" class="form-control mb-4 col-4" required />-->
-				<!-- <input type="text" th:field="*{departId}" placeholder="Department ID" class="form-control mb-4 col-4" required />-->
+				<select  th:field="*{department_id}"
+					class="form-control mb-4 col-4" required>
+					<option value="0" disabled selected>Select Department ID</option>
+					<option th:each="limit : ${listID}"
+						th:value="${limit.key}" th:text="${limit.key}"></option>
+						
+				</select>
 				
 				
-			
-				
-			
+
+
+
 				<button type="submit" class="btn btn-info col-2">Save
 					Employee</button>
 			</form>
-			
-			<!-- 
-			<form action="#" th:action="@{/saveEmployee}" th:object="${department}"
-				method="POST">
-				<!-- Add hidden form field to handle update -->
-				<!-- 
-				<input type="hidden" th:field="*{employees[0].id}" />
-				<input type="text" th:field="*{employees[0].firstName}" placeholder="Employee First Name" class="form-control mb-4 col-4" required />
-				<input type="text" th:field="*{employees[0].lastName}" placeholder="Employee Last Name" class="form-control mb-4 col-4" required /> 
-				<input type="email" th:field="*{employees[0].email}" placeholder="Employee Email" class="form-control mb-4 col-4" required />
-				<input type="text" th:field="*{employees[0].deptId}" placeholder="Employee Department ID" class="form-control mb-4 col-4" required />
-				
-				<input type="text" th:field="*{departName}" placeholder="Department Name" class="form-control mb-4 col-4" required />
-				<!-- <input type="text" th:field="*{departId}" placeholder="Department ID" class="form-control mb-4 col-4" required />-->
-				
-				<!-- 
-			
-				
-			
-				<button type="submit" class="btn btn-info col-2">Save
-					Employee</button>
-			</form>
-			-->
-			
-			
-	
+
+
+
+
+
+
 			<hr>
-	
+
 			<!-- <a th:href="@{/}">Back to Employee List</a> -->
-	
+
 		</div>
 	</div>
-	
+
 	<div th:insert="fragments/footer :: footer"></div>
 
 </body>

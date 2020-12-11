@@ -49,6 +49,7 @@ public class Employee {
 	private String email;
 
 	@Column(name = "department_id")
+	@NotNull(message = "Field cannot be blank")
 	private long department_id;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "employee")
