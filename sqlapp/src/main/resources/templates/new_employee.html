@@ -15,17 +15,17 @@
 </head>
 <body>
 
-	<div th:replace="fragments/header :: name(page='Employee Management')"></div>
+	<div th:replace="fragments/header :: name(page='Employee')"></div>
 	<div th:insert="fragments/nav"></div>
 
 	<div id="main">
 		<div class="container " id="w3-container">
-			<h1>Employee Management</h1>
+			<h1>Employee</h1>
 
-			<form action="#" th:action="@{/saveEmployee}" th:object="${employee}"
+			<form action="#" th:action="@{/employee/saveEmployee}" th:object="${employee}"
 				method="POST">
 				<!-- Add hidden form field to handle update -->
-
+				<span class="text-danger" th:text="${duplicate}"></span>
 				<input type="hidden" th:field="*{id}" /> 
 				<span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class = "text-danger">Full name error</span> 
 				<input type="text" th:field="*{firstName}"

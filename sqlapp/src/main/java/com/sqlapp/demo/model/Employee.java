@@ -7,22 +7,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.SecondaryTable;
-import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
-import javax.persistence.ForeignKey;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "employees")
-@SecondaryTables({ @SecondaryTable(name = "department") })
 public class Employee {
 
 	@Id
@@ -44,10 +38,11 @@ public class Employee {
 
 	@Valid
 	@NotBlank(message = "Field cannot be blank")
-	@Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
+	@Pattern(regexp="^[A-Za-z0-9]+[-._]{0,1}+[A-Za-z0-9]+@[a-zA-Z0-9]++\\.[a-zA-Z]{2,}$", message = "Please provide a valid email address")
 	@Column(name = "email")
 	private String email;
-
+//regexp="[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
+//regexp = ".+@.+\\..+"
 	@Column(name = "department_id")
 	@NotNull(message = "Field cannot be blank")
 	private long department_id;

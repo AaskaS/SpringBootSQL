@@ -10,6 +10,7 @@ import com.sqlapp.demo.model.Department;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
 	List<Department> findByDeptId(long dept_Id);
+	List<Department> findByDepartName(String dept_name);
 	
 
 

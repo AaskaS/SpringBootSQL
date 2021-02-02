@@ -1,17 +1,14 @@
 package com.sqlapp.demo.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.sqlapp.demo.model.Employee;
-
+import com.sqlapp.demo.model.Roles;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-	List<Employee> findByEmail(String email);
-	
+public interface RolesRepository extends JpaRepository<Roles, Long> {
 
+	//List<Roles> findById(Long id);
 }

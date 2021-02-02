@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<meta charset="ISO-8859-1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+<head>
+<title>Spring Boot User Authentication</title>
+</head>
+<body>
+	<header class="navbar navbar-expand-sm bg-dark navbar-light " >
+		<div class="sidebar d-flex">
+			<div class="sidebarHeader">
+
+				<a class="nounderline text-decoration-none text-light"
+					th:href="@{/login}"> <svg width="2em" height="2em"
+						viewBox="0 0 16 16" class="bi bi-house-door" fill="white"
+						xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd"
+							d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z" />
+  <path fill-rule="evenodd"
+							d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+</svg>
+				</a> <span class="text-light p-5 ">Sign Up</span>
+
+			</div>
+		</div>
+
+			
+			
+	</header>
+	<!-- <form role="form" th:action="@{/sign-up}" th:method="post" th:object="${user}"> -->
+	<div id="main">
+		<div class="container " id="w3-container">
+			<h1>Sign up</h1>
+			<form action='#' th:action="@{/register}" th:object="${user}"
+				method="POST">
+				<!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> -->
+				<input type="hidden" th:field="*{id}" /> <span class="text-danger"
+					th:text="${duplicate}"></span> <span
+					th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+					class="text-danger">username exists</span> <input type="text"
+					placeholder="Username" th:field="*{username}"
+					class="form-control mb-4 col-4"> <span
+					th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+					class="text-danger">username exists</span> <input type="text"
+					placeholder="First Name" th:field="*{firstName}"
+					class="form-control mb-4 col-4"> <span
+					th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+					class="text-danger">username exists</span> <input type="text"
+					placeholder="Last Name" th:field="*{lastName}"
+					class="form-control mb-4 col-4"> <span
+					th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+					class="text-danger">username exists</span> <input type="password"
+					placeholder="Password" th:field="*{password}"
+					class="form-control mb-4 col-4">
+
+				<button type="submit" class="btn btn-info col-2">Register</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

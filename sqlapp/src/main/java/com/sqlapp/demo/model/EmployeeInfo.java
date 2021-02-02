@@ -22,7 +22,7 @@ public class EmployeeInfo {
 
 	@Column(name = "number")
 	@Size(max = 15)
-	@Pattern(regexp="[0-9]+")
+	@Pattern(regexp="[0-9]{10,15}+")
 	private String number;
 
 	@Column(name = "country")

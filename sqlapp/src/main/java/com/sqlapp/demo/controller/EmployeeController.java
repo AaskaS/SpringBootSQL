@@ -1,5 +1,6 @@
 package com.sqlapp.demo.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,68 +8,89 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.sqlapp.demo.model.Department;
 import com.sqlapp.demo.model.Employee;
 import com.sqlapp.demo.model.EmployeeInfo;
-import com.sqlapp.demo.repository.DepartmentRepository;
+import com.sqlapp.demo.service.DepartmentService;
 import com.sqlapp.demo.service.EmployeeInfoService;
 import com.sqlapp.demo.service.EmployeeService;
 
 @Controller
 public class EmployeeController {
+
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private EmployeeInfoService employeeInfoService;
 
+	@Autowired
+	private DepartmentService departmentService;
 
 	// display list of employees
 	@GetMapping("/")
-	public String viewHomePage(Model model) {
+	public String home1() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+			return "login";
+		}
+		// return "login";
+		return "redirect:/main";
+	}
+
+	@GetMapping("/main")
+	public String main(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+			return "expired";
+		}
 		model.addAttribute("listEmployees", employeeService.getAllEmployees());
 		return "index";
 	}
-	
-	@GetMapping("/showFormForUpdate/{id}")
+
+	@GetMapping("/employee/showFormForUpdate/{id}")
 	public String showFormForUpdate(@PathVariable(value = "id") long id, Model model) {
 		// get employee from the service
 		Employee employee = employeeService.getEmployeeById(id);
 
 		// set employee as a model attribute to pre-populate the form
-		
-		List<Department> listID = employeeService.getAllDepartment();
-		System.out.println(listID.get(1).getDepartName());
-		Map<Long,String> map = new HashMap<Long,String>();
-		for (Department i : listID) map.put(i.getDeptId(),i.getDepartName());
-		
-		
+
+		List<Department> listID = departmentService.getAllDepartment();
+		Map<Long, String> map = new HashMap<Long, String>();
+		for (Department i : listID)
+			map.put(i.getDeptId(), i.getDepartName());
+
 		model.addAttribute("listID", map);
 		model.addAttribute("employee", employee);
-		
 
 		return "new_employee";
 		// tutorial said to use "update_employee" but ultimately it's the same as
 		// using "new_employee" + hidden id field
 	}
 
-
-	@GetMapping("/showNewEmployeeForm")
+	@GetMapping("/employee/showNewEmployeeForm")
 	public String showNewEmployeeForm(Model model) {
 		// create model attribute to bind form data
 		Employee employee = new Employee();
 		Department department = new Department();
 
-		Map<Long,String> map = employeeService.getDepartmentMap();
-		
-		
+		Map<Long, String> map = departmentService.getDepartmentMap();
+
 		model.addAttribute("listID", map);
 		model.addAttribute("employee", employee);
 		model.addAttribute("department", department);
@@ -76,72 +98,66 @@ public class EmployeeController {
 
 	}
 
-	@PostMapping("/saveEmployee")
-	public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result, Model model) {
+	@PostMapping("/employee/saveEmployee")
+	public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result,
+			Model model) {
 		// save employee to db
-		System.out.println("I AM HEREEEE");
-		System.out.println(employee.getDepartment_id());
-		
 
 		if (result.hasErrors()) {
-			Map<Long,String> map = employeeService.getDepartmentMap();
-			
+			Map<Long, String> map = departmentService.getDepartmentMap();
+
 			model.addAttribute("listID", map);
-			
+
+			return "new_employee";
+		} else if (employeeService.checkEmployee(employee.getEmail())) {
+			Map<Long, String> map = departmentService.getDepartmentMap();
+
+			model.addAttribute("listID", map);
+			model.addAttribute("duplicate", "Email already exists!");
+
 			return "new_employee";
 		} else {
-			System.out.println("no errors");
 
 			employeeService.saveEmployee(employee);
 
-			return "redirect:/";
+			return "redirect:/main";
 		}
 
 	}
 
-	@GetMapping("/showNewDepartmentForm")
-	public String showNewDepartmentForm(Model model) {
-		// create model attribute to bind form data
-		Department department = new Department();
-		model.addAttribute("department", department);
-		model.addAttribute("listDepartment", employeeService.getAllDepartment());
-		return "add_department";
-
-	}
-
-	@PostMapping("/saveDepartment")
-	public String saveDepartment(@Valid @ModelAttribute("department") Department department, BindingResult result) {
-		// save employee to db
-
-		if (result.hasErrors()) {
-			return "add_department";
-		} else {
-
-			employeeService.saveNewDepartment(department);
-
-			return "redirect:/";
-		}
-
-	}
-	
-	@GetMapping("/deleteDepartment/{id}")
-	public String deleteDepartment(@PathVariable(value = "id") long id) {
-		// call delete employee method
-		this.employeeService.deleteDepartmentById(id);
-
-		return "redirect:/";
-	}
-
-	@GetMapping("/deleteEmployee/{id}")
+	@GetMapping("/employee/deleteEmployee/{id}")
 	public String deleteEmployee(@PathVariable(value = "id") long id) {
 		// call delete employee method
-		this.employeeService.deleteEmployeeById(id);
+		Employee employee = employeeService.getEmployeeById(id);			
+		EmployeeInfo employeeInfo = employee.getEmployeeinfo();
+		
+		try {
+			this.employeeInfoService.deleteEmployeeInfoById(employeeInfo.getId());
+			this.employeeService.deleteEmployeeById(id);
+		}
+		catch(Exception e) {
+			this.employeeService.deleteEmployeeById(id);
+		}
+		
 
-		return "redirect:/";
+		return "redirect:/main";
 	}
-	
-	
 
 
 
+
+	@GetMapping("/about")
+	public String about() {
+		return "about";
+	}
+
+	/*
+	 * @GetMapping("/login") public String login() { //
+	 * this.employeeService.checkUser(); return "login"; }
+	 */
+
+	@GetMapping("/403")
+	public String error403() {
+		return "403";
+	}
 }

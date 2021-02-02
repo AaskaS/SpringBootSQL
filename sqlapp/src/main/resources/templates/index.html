@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="ISO-8859-1">
 <title>Employee Management System</title>
@@ -9,6 +10,7 @@
 	crossorigin="anonymous">
 <link th:href="@{/css/main.css}" rel="stylesheet">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" th:src="@{/js/actions.js}"></script>
 <script type="text/javascript"
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript"
@@ -37,11 +39,14 @@
 
 				<div class="container my-2">
 					<h1>Employee List</h1>
-					<a th:href="@{/showNewEmployeeForm}"
+					<a th:href="@{/employee/showNewEmployeeForm}"
 						class="btn btn-primary btn-sm mb-3">Add Employee</a> <a
-						th:href="@{/showNewDepartmentForm}"
+						th:href="@{/department/show-new-department-form}"
 						class="btn btn-primary btn-sm mb-3">Add Department</a>
-
+					
+					<!-- <div sec:authorize="hasAuthority('ADMIN')">
+					  This content is only shown to administrators.
+					</div>-->
 					<table id="employeetable"
 						class="table table-striped table0responsive-md">
 						<thead>
@@ -63,13 +68,15 @@
 								<td th:text="${employee.department_id}"></td>
 								<!--<td th:text="${employee.depart_id}"></td> -->
 								<td><a
-									th:href="@{/showProfileUpdate/{id}(id=${employee.id})}"
+									th:href="@{/info/showProfileUpdate/{id}(id=${employee.id})}"
 									class="btn btn-primary">Edit Profile</a></td>
 								<td><a
-									th:href="@{/showFormForUpdate/{id}(id=${employee.id})}"
-									class="btn btn-primary">Update</a> <a
-									th:href="@{/deleteEmployee/{id}(id=${employee.id})}"
+									th:href="@{/employee/showFormForUpdate/{id}(id=${employee.id})}"
+									class="btn btn-primary">Update</a>
+									<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/employee/deleteEmployee/{id}(id=${employee.id})}"
 									class="btn btn-danger">Delete</a></td>
+							
+								 
 							</tr>
 						</tbody>
 
